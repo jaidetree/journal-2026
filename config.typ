@@ -6,8 +6,8 @@
 #let habits = (
   "Meditate", 
   "Side-Projects", 
-  "Draw", 
-  "Music", 
+  "Draw \ Music", 
   "Read", 
-  "Spouse"
+  "Gaming",
+  "Relationships"
 )
