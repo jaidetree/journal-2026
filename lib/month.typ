@@ -29,13 +29,31 @@
     
     #for d in range(1, daysInMonth + 1) {
       let dayDate = datetime(year: year, month: monthNum, day: d)
-      let dayDateStr = dayDate.display("[weekday repr:short]").slice(0, 1)
-      place(top + left, dx: 35pt + 50pt * 2, dy: 180pt + 50pt * d, text(str(d), size: 24pt,  fill: luma(40%))) 
-      place(top + left, dx: 85pt + 50pt * 2, dy: 180pt + 50pt * d, align(center, text(dayDateStr, size: 24pt,  fill: luma(40%))))
+      let weekdayStr = dayDate.display("[weekday repr:short]").slice(0, 1)
+
+      // Place the date number in the left-most column
+      place(top + left, dx: 12pt + 50pt * 2, dy: 160pt + 50pt * d, box(
+        align(center + horizon, text(str(d), 
+          size: 24pt,  
+          fill: luma(40%)
+        )), 
+        width: 50pt, 
+        height: 50pt
+      ))
+      
+      // Place the weekday label in a column to the right of the date column
+      place(
+        top + left, dx: 64pt + 50pt * 2, dy: 160pt + 50pt * d, 
+        box(
+          align(center + horizon,  text(weekdayStr, size: 24pt,  fill: luma(40%))),
+          width: 50pt,
+          height: 50pt
+        )
+      )
     }
 
     #for d in range(firstDay + weekdayOffset, daysInMonth + 1, step: 7) {
-      place(top + left, dx: 50pt * 2, dy: 10pt, line(start: (12.5pt, d * 50pt), end: (100%, d * 50pt), stroke: 4pt + black)) 
+      place(top + left, dx: 50pt * 2, dy: 10pt, line(start: (12.5pt, d * 50pt), end: (100% - 112.5pt, d * 50pt), stroke: 4pt + black)) 
     }
 
     #place(top + left, dx: 50pt * 2, dy: 210pt, line(
