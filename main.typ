@@ -1,5 +1,5 @@
 #import "config.typ" as cfg
-#import "lib/grids.typ": grids
+#import "lib/grids.typ": grids, span, xPos, yPos
 #import "lib/year.typ": yearPage
 #import "lib/projects.typ": projectsPage
 #import "lib/month.typ": monthPage, calcDaysInMonth
@@ -21,6 +21,27 @@
 )
 
 #let generate(year: 2026) = {
+  page()[
+    #grids()   
+    #place(
+      right + bottom,
+      dy: -360pt,
+      dx: -240pt,
+      box(
+        fill: white,
+        stroke: 80pt + white, 
+        align(left, 
+          text("2026\n", size: 200pt)
+          +
+          text("DAILY JOURNAL\n", size: 100pt)
+          +
+          align(right,
+          text("Designed by Jaide", size: 30pt, stretch: 100%))
+        )
+      )
+    )
+  ]
+  
   page( )[
     #grids()
     #place(top + left, image("svgs/vision-board.svg", width: 100%, height: 100%))
