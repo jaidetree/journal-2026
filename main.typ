@@ -60,26 +60,27 @@
   
   projectsPage()
   
-  // Generate an array of data
-  
   for monthNum in range(1, 11) {
     let monthDate = datetime(year: year, month: monthNum, day: 1)
     let daysInMonth = calcDaysInMonth(monthDate)
     
     monthPage(monthDate, daysInMonth)
 
-    for weekDayNum in range(1, daysInMonth) {
-      let weekDate = calcWeekStart(monthDate, weekDayNum)
+    // Account for Jan 1st not being on a Sunday
+    if monthDate.weekday() != 7 {
+      weekPage(calcWeekStart(monthDate, monthDate.day()))
+    }
 
-      if weekDate.weekday() == 7 {
+    for dayNum in range(1, daysInMonth + 1) {
+      let dayDate = datetime(year: year, month: monthNum, day: dayNum)
+
+      if dayDate.weekday() == 7 {
+        let weekDate = calcWeekStart(monthDate, dayNum)
         weekPage(weekDate)
       }
 
-      for dayNum in range(0, 7) {
-        let dayDate = weekDate + duration(days: dayNum)
 
-        dayPage(dayDate)
-      }
+      dayPage(dayDate)
     }
   }
 }

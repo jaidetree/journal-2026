@@ -26,7 +26,7 @@
       place(
         top + left, 
         dx: grids.xPos(gridCtx, 25.4) + grids.span(gridCtx, h * 1.5),
-        dy: grids.yPos(gridCtx, 11.5),
+        dy: grids.yPos(gridCtx, 13.5),
         rotate(
           origin: bottom + left, 
           -75deg,
