@@ -14,11 +14,10 @@
   lastDayDate.day()
 }
 
-#let monthPage(monthDate) = {
+#let monthPage(monthDate, daysInMonth) = {
   let monthName = monthDate.display("[month repr:long]")
   let year = monthDate.year()
   let monthNum = monthDate.month()
-  let daysInMonth = calcDaysInMonth(monthDate)
   let daysToHide = 31 - daysInMonth
   let firstDay = monthDate.weekday()
   let weekdayOffset = 7 - firstDay

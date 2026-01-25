@@ -2,7 +2,9 @@
 #import "lib/grids.typ": grids
 #import "lib/year.typ": yearPage
 #import "lib/projects.typ": projectsPage
-#import "lib/month.typ": monthPage
+#import "lib/month.typ": monthPage, calcDaysInMonth
+#import "lib/week.typ": weekPage, calcWeekStart
+#import "lib/day.typ": dayPage
 
 #set page(
   width: cfg.pageWidth,
@@ -32,13 +34,24 @@
   
   for monthNum in range(1, 11) {
     let monthDate = datetime(year: year, month: monthNum, day: 1)
-    monthPage(monthDate)
+    let daysInMonth = calcDaysInMonth(monthDate)
+    
+    monthPage(monthDate, daysInMonth)
+
+    for weekDayNum in range(1, daysInMonth) {
+      let weekDate = calcWeekStart(monthDate, weekDayNum)
+
+      if weekDate.weekday() == 7 {
+        weekPage(weekDate)
+      }
+
+      for dayNum in range(0, 7) {
+        let dayDate = weekDate + duration(days: dayNum)
+
+        dayPage(dayDate)
+      }
+    }
   }
-  
-  page()[
-    #grids()
-    #place(top + left, image("svgs/week.svg", width: 100%, height: 100%))
-  ]
   
   page()[
     #grids()
