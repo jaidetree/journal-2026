@@ -1,14 +1,72 @@
 #import "../config.typ" as cfg
 
-#let grids(width: cfg.pageWidth, height: cfg.pageHeight, margin: cfg.pageMargin, gridStrokeWidth: 1pt, subGridSize: 25pt, baseGridSize: 50pt, dotGridRadius: 4.5pt) = {
+// Calculate points of cells based on baseGridSize
+// Example: span(ctx, 2) = 100pt // with defaults
+#let span(gridCtx, cells) = {
+  gridCtx.baseGridSize * cells
+}
+
+// Calculate position from left of grid + 2 columns
+#let xPos(gridCtx, cells) = {
+  // Calculate 2 columns from the xOffset as the supernote toolbar will typically be over that space
+  let safeAreaStart = span(gridCtx, 2)
+  
+  gridCtx.xOffset + safeAreaStart + span(gridCtx, cells)
+}
+
+// Calculate position from top of grid
+#let yPos(gridCtx, cells) = {
+  gridCtx.yOffset + span(gridCtx, cells)
+}
+
+
+#let calcContext(
+  width: cfg.pageWidth, 
+  height: cfg.pageHeight, 
+  margin: cfg.pageMargin, 
+  gridStrokeWidth: 1pt, 
+  subGridSize: 25pt, 
+  baseGridSize: 50pt, 
+  dotGridRadius: 4.5pt
+) = {
   let dotGridOffset = -1 * dotGridRadius
   
-  // Setup page properties
+  // Center the grids on the page
+  let frameWidth = width - (2 * margin)
+  let frameHeight = height - (2 * margin)
+  let xOffset = ((frameWidth - (calc.floor(frameWidth / baseGridSize) * baseGridSize))) / 2
+  let yOffset = ((frameHeight - (calc.floor(frameHeight / baseGridSize) * baseGridSize))) / 2
   
-  // set page(margin: margin, width: width, height: height, fill: white)
-  
-  // Grids
-  
+  (
+    width: width,
+    height: height,
+    margin: margin,
+    gridStrokeWidth: gridStrokeWidth,
+    subGridSize: subGridSize,
+    baseGridSize: baseGridSize,
+    dotGridRadius: dotGridRadius,
+    dotGridOffset: dotGridOffset,
+    frameWidth: frameWidth,
+    frameHeight: frameHeight,
+    xOffset: xOffset,
+    yOffset: yOffset,
+  )
+}
+
+#let render(
+  width: cfg.pageWidth, 
+  height: cfg.pageHeight, 
+  margin: cfg.pageMargin, 
+  gridStrokeWidth: 1pt, 
+  subGridSize: 25pt, 
+  baseGridSize: 50pt, 
+  dotGridRadius: 4.5pt,
+  dotGridOffset: 0pt,
+  frameWidth: 0pt,
+  frameHeight: 0pt,
+  xOffset: 0pt,
+  yOffset: 0pt,
+) = {
   // Define the subGrid pattern and color
   let subGridStroke = gridStrokeWidth + rgb("#bbbbbb")
   let subGridPattern = tiling(size: (subGridSize, subGridSize))[
@@ -29,12 +87,6 @@
     #place(circle(radius: dotGridRadius, fill: dotGridColor))
   ]
   
-  // Center the grids on the page
-  let frameWidth = width - (2 * margin)
-  let frameHeight = height - (2 * margin)
-  let xOffset = ((frameWidth - (calc.floor(frameWidth / baseGridSize) * baseGridSize))) / 2
-  let yOffset = ((frameHeight - (calc.floor(frameHeight / baseGridSize) * baseGridSize))) / 2
-  
   // Fill the sub-grid and base-grids
   place(top + left, dx: xOffset, dy: yOffset, rect(fill: subGridPattern, width: 100% - xOffset, height: 100% - yOffset))
   place(top + left, dx: xOffset, dy: yOffset, rect(fill: baseGridPattern, width: 100% - xOffset, height: 100% - yOffset))
@@ -46,4 +98,26 @@
   
   // Draw a line marking the always visible space on the right when the toolbar is open
   place(top + left, line(start: (xOffset + (2 * baseGridSize), 0pt), end: (xOffset + (2 * baseGridSize), frameHeight), stroke: 2pt + rgb("#999")))
+}
+
+#let grids(
+  width: cfg.pageWidth, 
+  height: cfg.pageHeight, 
+  margin: cfg.pageMargin, 
+  gridStrokeWidth: 1pt, 
+  subGridSize: 25pt, 
+  baseGridSize: 50pt, 
+  dotGridRadius: 4.5pt,
+) = {
+  let ctx = calcContext(
+    width: width, 
+    height: height, 
+    margin: margin, 
+    gridStrokeWidth: gridStrokeWidth, 
+    subGridSize: subGridSize, 
+    baseGridSize: baseGridSize, 
+    dotGridRadius: dotGridRadius
+  )
+
+  render(..ctx)
 }

@@ -1,5 +1,5 @@
 #import "../config.typ" as cfg
-#import "grids.typ": grids
+#import "grids.typ"
 
 #let calcDaysInMonth(monthDate) = {
   let monthNum = monthDate.month()
@@ -23,8 +23,10 @@
   let firstDay = monthDate.weekday()
   let weekdayOffset = 7 - firstDay
 
+  let gridCtx = grids.calcContext()
+
   page()[
-    #grids()
+    #grids.render(..gridCtx)
     #place(top + left, image("../svgs/month.svg", width: 100%, height: 100%))
     
     #for d in range(1, daysInMonth + 1) {
@@ -32,41 +34,85 @@
       let weekdayStr = dayDate.display("[weekday repr:short]").slice(0, 1)
 
       // Place the date number in the left-most column
-      place(top + left, dx: 12pt + 50pt * 2, dy: 160pt + 50pt * d, box(
-        align(center + horizon, text(str(d), 
-          size: 24pt,  
-          fill: luma(40%)
-        )), 
-        width: 50pt, 
-        height: 50pt
-      ))
+      place(
+        top + left, 
+        dx: grids.xPos(gridCtx, 0), 
+        dy: grids.yPos(gridCtx, 3 + d), 
+        box(
+          align(center + horizon, text(str(d), 
+            size: 24pt,  
+            fill: luma(40%)
+          )), 
+          width: 50pt, 
+          height: 50pt
+        )
+      )
       
       // Place the weekday label in a column to the right of the date column
       place(
-        top + left, dx: 64pt + 50pt * 2, dy: 160pt + 50pt * d, 
+        top + left, 
+        dx: grids.xPos(gridCtx, 1),
+        dy: grids.yPos(gridCtx, 3 + d), 
         box(
           align(center + horizon,  text(weekdayStr, size: 24pt,  fill: luma(40%))),
-          width: 50pt,
-          height: 50pt
+          width: gridCtx.baseGridSize,
+          height: gridCtx.baseGridSize,
         )
       )
     }
 
+    // Place thicker lines to separate weeks
     #for d in range(firstDay + weekdayOffset, daysInMonth + 1, step: 7) {
-      place(top + left, dx: 50pt * 2, dy: 10pt, line(start: (12.5pt, d * 50pt), end: (100% - 112.5pt, d * 50pt), stroke: 4pt + black)) 
+      place(
+        top + left, 
+        dx: grids.xPos(gridCtx, 0), 
+        dy: grids.yPos(gridCtx, 0), 
+        line(
+          start: (0pt, grids.span(gridCtx, d)), 
+          end: (grids.span(gridCtx, 35), grids.span(gridCtx, d)), 
+          stroke: 4pt + black
+        )
+      ) 
     }
 
-    #place(top + left, dx: 50pt * 2, dy: 210pt, line(
-      start: (12.5pt, daysInMonth * 50pt), 
-      end: (100% - 112.5pt, daysInMonth * 50pt), 
-      stroke: 4pt + black
-    ))
+    // Place thick line after last day in month
+    #{
+      let y = grids.span(gridCtx, daysInMonth)
+      
+      place(
+        top + left, 
+        dx: grids.xPos(gridCtx, 0), 
+        dy: 210pt, 
+        line(
+          start: (0pt, y), 
+          end: (grids.span(gridCtx, 35), y), 
+          stroke: 4pt + black
+        )
+      )
+    }
 
+    // Place habit labels
     #for h in range(0, cfg.habits.len()) {
       let habit = cfg.habits.at(h)
-      place(top + left, dx: 1450pt + h * 50pt, dy: 180pt, rotate(-75deg, text(upper(habit), size: 30pt), origin: bottom + left))
+      
+      place(
+        top + left, 
+        dx: grids.xPos(gridCtx, 26.75) + grids.span(gridCtx, h), 
+        dy: grids.yPos(gridCtx, 3.25), 
+        rotate(-75deg, text(upper(habit), size: 30pt), origin: bottom + left)
+      )
     }
-    
-    #place(top + left, dx: 625pt, dy: 66pt, text(upper(monthName) + " " + str(year)))
+
+    // Place title including month
+    #place(
+      top + left, 
+      dx: grids.xPos(gridCtx, 3), 
+      dy: grids.yPos(gridCtx, 1), 
+      box(
+        width: grids.span(gridCtx, 22), 
+        height: grids.span(gridCtx, 2),
+        align(center + horizon, text(upper(monthName) + " " + str(year)))
+      )
+    )
   ]
 }
