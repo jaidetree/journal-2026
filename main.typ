@@ -1,5 +1,5 @@
 #import "config.typ" as cfg
-#import "lib/grids.typ": grids, span, xPos, yPos
+#import "lib/grids.typ"
 #import "lib/year.typ": yearPage
 #import "lib/projects.typ": projectsPage
 #import "lib/month.typ": monthPage, calcDaysInMonth
@@ -21,29 +21,38 @@
 )
 
 #let generate(year: 2026) = {
+  let gridCtx = grids.calcContext()
+  
   page()[
-    #grids()   
+    #grids.render(..gridCtx) 
     #place(
-      right + bottom,
-      dy: -360pt,
-      dx: -240pt,
+      top + left,
+      dx: grids.xPos(gridCtx, 16),
+      dy: grids.yPos(gridCtx, 36),
       box(
+        width: grids.span(gridCtx, 16),
         fill: white,
-        stroke: 80pt + white, 
-        align(left, 
-          text("2026\n", size: 200pt)
-          +
-          text("DAILY JOURNAL\n", size: 100pt)
-          +
-          align(right,
-          text("Designed by Jaide", size: 30pt, stretch: 100%))
+        radius: 20pt,
+        stroke: 3pt + black,
+        pad(
+          grids.span(gridCtx, 2),
+          align(left, 
+            text("2026\n", size: 200pt)
+            +
+            text("DAILY JOURNAL\n", size: 100pt)
+            +
+            pad(
+              right: grids.span(gridCtx, 1),
+              align(right, text("Designed by Jaide", size: 30pt, stretch: 100%))
+            )
+          )
         )
       )
     )
   ]
   
   page( )[
-    #grids()
+    #grids.grids()
     #place(top + left, image("svgs/vision-board.svg", width: 100%, height: 100%))
   ]
   
@@ -73,11 +82,6 @@
       }
     }
   }
-  
-  page()[
-    #grids()
-    #place(top + left, image("svgs/day.svg", width: 100%, height: 100%))
-  ]
 }
 
 #generate(year: 2026)
