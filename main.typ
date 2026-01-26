@@ -1,5 +1,6 @@
 #import "config.typ" as cfg
 #import "lib/grids.typ"
+#import "lib/cover.typ": coverPage
 #import "lib/year.typ": yearPage
 #import "lib/projects.typ": projectsPage
 #import "lib/month.typ": monthPage, calcDaysInMonth
@@ -21,34 +22,10 @@
 )
 
 #let generate(year: 2026) = {
-  let gridCtx = grids.calcContext()
-  
+  coverPage(year)
+
   page()[
-    #grids.render(..gridCtx) 
-    #place(
-      top + left,
-      dx: grids.xPos(gridCtx, 16),
-      dy: grids.yPos(gridCtx, 36),
-      box(
-        width: grids.span(gridCtx, 16),
-        fill: white,
-        radius: 20pt,
-        stroke: 3pt + black,
-        pad(
-          grids.span(gridCtx, 2),
-          align(left, 
-            text("2026\n", size: 200pt)
-            +
-            text("DAILY JOURNAL\n", size: 100pt)
-            +
-            pad(
-              right: grids.span(gridCtx, 1),
-              align(right, text("Designed by Jaide", size: 30pt, stretch: 100%))
-            )
-          )
-        )
-      )
-    )
+    #grids.grids()
   ]
   
   page( )[
