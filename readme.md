@@ -65,3 +65,6 @@ Contributions are welcome but it would be preferred if a issue in the github rep
 
 If you would prefer to create a Typst package, I would be happy to start linking them on the readme for users to add to their journals.
 
+## Commissions
+
+If you want extensive customizations but are not interested in learning Typst or working with the SVGs included please consider reaching out!
