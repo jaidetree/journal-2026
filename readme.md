@@ -2,6 +2,8 @@
 
 A collection of custom journal templates for 2026 aimed for e-ink tablets such as the Supernote. 
 
+[![Screenshot of Day Entry](https://raw.githubusercontent.com/jaidetree/journal-2026/refs/heads/main/docs/screenshots/journal-2026.png)](https://raw.githubusercontent.com/jaidetree/journal-2026/refs/heads/main/docs/screenshots/journal-2026.png)
+
 ## Usage
 
 Use the Typst link below to see the live preview of the journal template. From there you can export a PDF or make a copy of the project and customize it to your needs. 
@@ -39,6 +41,10 @@ Update the main.typ file and look for the following at the bottom of the file:
 
 Replace `2026` with the target year and the rest of the pages will be regenerated based on the target year.
 
+### How do I change the habits?
+
+Open up the `config.typ` file and change the habits as desired. The layouts support up to 5 currently.
+
 ### How do I customize the grid or page dimensions?
 
 The easiest way to change the grid or page dimensions is to modify the config.typ file. However, you may need to modify the template SVGs to fit the updated dimensions.
@@ -61,7 +67,7 @@ svg-width = width - (2 * margin) - (2 * xOffset)
 
 ## Contributing
 
-Contributions are welcome but it would be preferred if a issue in the github repo is created first as I may not approve every change or additional module. 
+Feature requests, fixes, improvements, and contributions are welcome but it would be preferred if a issue in the github repo is created first as I may not approve every change or additional module. 
 
 If you would prefer to create a Typst package, I would be happy to start linking them on the readme for users to add to their journals.
 
