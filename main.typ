@@ -4,6 +4,7 @@
 #import "lib/year.typ": yearPage
 #import "lib/projects.typ": projectsPage
 #import "lib/month.typ": monthPage, calcDaysInMonth
+#import "lib/calendar.typ": calendarPage
 #import "lib/week.typ": weekPage, calcWeekStart
 #import "lib/day.typ": dayPage
 
@@ -42,6 +43,7 @@
     let daysInMonth = calcDaysInMonth(monthDate)
     
     monthPage(monthDate, daysInMonth)
+    calendarPage(monthDate, daysInMonth) 
 
     // Account for Jan 1st not being on a Sunday
     if monthDate.weekday() != 7 {
