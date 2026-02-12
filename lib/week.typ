@@ -19,9 +19,7 @@
 
   page()[
     #grids.render(..gridCtx) 
-    
     #place(top + left, image("../svgs/week.svg", width: 100%, height: 100%))
-
     #for d in range(0, 7) {
       let weekDate = weekStartDate + duration(days: d)
       

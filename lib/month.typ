@@ -14,13 +14,17 @@
   lastDayDate.day()
 }
 
+#let weekDayZero(dayOfWeek) = {
+  if dayOfWeek == 7 { 0 } else { dayOfWeek }
+}
+
 #let monthPage(monthDate, daysInMonth) = {
   let monthName = monthDate.display("[month repr:long]")
   let year = monthDate.year()
   let monthNum = monthDate.month()
   let daysToHide = 31 - daysInMonth
-  let firstDay = monthDate.weekday()
-  let weekdayOffset = 7 - firstDay
+  let firstDay = weekDayZero(monthDate.weekday())
+  let weekdayOffset = calc.rem(7 - firstDay, 7)
 
   let gridCtx = grids.calcContext()
 
@@ -61,15 +65,15 @@
     }
 
     // Place thicker lines to separate weeks
-    #for d in range(firstDay + weekdayOffset, daysInMonth + 1, step: 7) {
+    #for d in range(weekdayOffset, daysInMonth + 1, step: 7) {
       place(
         top + left, 
         dx: grids.xPos(gridCtx, 0), 
         dy: grids.yPos(gridCtx, 0), 
         line(
-          start: (0pt, grids.span(gridCtx, d)), 
-          end: (grids.span(gridCtx, 35), grids.span(gridCtx, d)), 
-          stroke: 4pt + black
+          start: (0pt, grids.span(gridCtx, d + 4)), 
+          end: (grids.span(gridCtx, 35), grids.span(gridCtx, d + 4)), 
+          stroke: 5pt + black
         )
       ) 
     }
@@ -85,7 +89,7 @@
         line(
           start: (0pt, y), 
           end: (grids.span(gridCtx, 35), y), 
-          stroke: 4pt + black
+          stroke: 5pt + black
         )
       )
     }

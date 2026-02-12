@@ -41,11 +41,9 @@
       top + left,
       dx: grids.xPos(gridCtx, 0),
       dy: grids.yPos(gridCtx, 4),
-      rect(
+      box(
         width: grids.span(gridCtx, width),
         height: grids.span(gridCtx, height),
-        stroke: 0pt,
-        inset: 0pt,
         radius: 20pt,
         grid(
           columns: range(0, 7).map(_ => grids.span(gridCtx, width / 7)),
@@ -54,15 +52,15 @@
           gutter: 0pt,
           stroke: 3pt + black,
           align: top + right,
+          
           ..range(0, 7).map(d => grid.cell(
             fill: luma(90%),
             align: center + horizon,
             upper(text(size: 35pt, fill: luma(40%), weekdays.at(d)))
           )),
+          
           ..range(0, firstDayOffset).map(d => {
             grid.cell(
-              x: d, 
-              y: 1, 
               text(
                 size: 30pt,
                 fill: luma(60%),
@@ -70,6 +68,7 @@
               )
             )
           }),
+          
           ..range(1, daysInMonth + 1).map(d => grid.cell(
             text(
               size: 30pt,
@@ -79,6 +78,5 @@
         )
       )
     )
-
   ]
 }

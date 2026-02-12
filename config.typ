@@ -9,5 +9,5 @@
   "Read", 
   "Gaming",
   "Exercise",
-  "Relationships"
+  "Relationships",
 )
